@@ -41,6 +41,7 @@ function syncDifficultyUI() {
 // 6) difficulty headers
 diffRadios.forEach((radio) => {
   radio.addEventListener("change", () => {
+    if (gameRunning) return; // ⛔ Prevent changes mid-game
     console.log("🛠 Difficulty:", radio.value);
     syncDifficultyUI();
   });
@@ -222,7 +223,7 @@ function closeOverlay() {
 
 // 13) Sound hook up for Buttons
 startBtn.addEventListener("click", () => {
-  if (gameRunning) return; // Prevent double starts
+  if (gameRunning) return; // ✅ Prevent double starts
 
   const picked = document.querySelector('input[name="difficulty"]:checked');
   if (!picked) {
@@ -230,21 +231,17 @@ startBtn.addEventListener("click", () => {
     return;
   }
 
-  try {
-    // Play the music only if it hasn't started yet or was faded
-    if (sounds.start.paused || sounds.start.currentTime === 0) {
-      sounds.start.volume = 1;
-      sounds.start.currentTime = 0;
-      sounds.start.play().catch((err) => {
-        console.warn("⚠️ Could not play start sound:", err);
-      });
-    }
-  } catch (err) {
-    console.warn("⚠️ Could not play start sound:", err);
+  // Play music only on first game start
+  if (sounds.start.paused && sounds.start.currentTime === 0) {
+    sounds.start.volume = 1;
+    sounds.start.play().catch((err) => {
+      console.warn("⚠️ Could not play start sound:", err);
+    });
   }
 
   startGame();
 });
+
 
 resetBtn.addEventListener("click", () => {
   clearInterval(gameInterval);
