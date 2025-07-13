@@ -68,15 +68,15 @@
             <p>
               🟡 <strong>Normal</strong><br />
               <strong>Drop rate:</strong> every <strong>0.8 s</strong><br />
-              <strong>Pollution:</strong> about <strong>33%</strong> “bad” drops
+              <strong>Pollution:</strong> about <strong>10%</strong> “bad” drops
             </p>
             <p>
-              <em
-                >“Time to step up your game. One in three drops is polluted—just
-                like in the real world nearly 1 in 3 people lack safe water.
-                Stay sharp, tap the clean ones, and fill your bucket before the
-                clock runs out.”</em
-              >
+              <em>
+                “This round mirrors reality: 1 in 10 people around the world
+                live without safe drinking water. Can you beat the odds? Dodge
+                the polluted drops, tap the clean ones, and bring the bucket to
+                full before the clock runs out.”
+              </em>
             </p>
           </div>
         </div>
@@ -127,11 +127,15 @@
         Tap or hover over the glowing markers to learn how charity: water is
         transforming lives in each region. Click links to explore projects.
         Scroll or pinch to zoom in!
+
+
       </p>
       <div id="globeViz" style="width: 100%; height: 600px"></div>
     </section>
 
-    <div id="charity-info">
+    <section id="charity-info">
+
+      </div>
       <p>
         <strong>About charity: water:</strong>
         <br /><br />
@@ -163,13 +167,12 @@
           Learn more about their work and impact →</a
         >
       </p>
-    </div>
+    </section>
 
-    <!-- Globe.gl + Three.js + Game JS-->
-    <script src="https://unpkg.com/three"></script>
+    <!-- Globe.gl + Game JS-->
     <script src="https://unpkg.com/globe.gl"></script>
+    <script src="globe-setup.js" defer></script>
     <script src="script.js" defer></script>
-    <script src="globe-setup.js"></script>
 
     <footer>
       <p>
@@ -186,6 +189,26 @@
         >.
       </p>
     </footer>
+
+    <script>
+      const faders = document.querySelectorAll(".scroll-fade");
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              observer.unobserve(entry.target); // remove once triggered
+            }
+          });
+        },
+        {
+          threshold: 0.2,
+        }
+      );
+
+      faders.forEach((el) => observer.observe(el));
+    </script>
 
     <script>
       document.querySelectorAll('a[href^="#"]').forEach((anchor) => {

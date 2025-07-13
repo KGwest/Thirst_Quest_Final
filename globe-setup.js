@@ -52,6 +52,6 @@ const waterImpactPoints = [
 
 globe.pointsData(waterImpactPoints);
 globe.pointOfView({ lat: 0, lng: 0, altitude: 2 });
-globe.labelsData(data)
-  .labelSize(2.5) // 
-  .labelDotRadius(0.8); //
+// globe.labelsData(data)
+//  .labelSize(2.5) // 
+//  .labelDotRadius(0.8); //

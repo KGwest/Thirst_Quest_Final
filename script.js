@@ -1,89 +1,105 @@
-// Grab DOM elements up front
-const gameArea     = document.getElementById("game-area");
+console.log("🎮 script.js loaded");
+let gameRunning = false;
+
+// DOM elements
+const gameArea = document.getElementById("game-area");
 const timerDisplay = document.getElementById("timer");
-const startBtn     = document.getElementById("start-btn");
-const resetBtn     = document.getElementById("reset-btn");
-const waterLevel   = document.getElementById("water-level");
+const startBtn = document.getElementById("start-btn");
+const resetBtn = document.getElementById("reset-btn");
+const waterLevel = document.getElementById("water-level");
 const scoreDisplay = document.getElementById("score");
-const diffRadios   = document.querySelectorAll('input[name="difficulty"]');
+const diffRadios = document.querySelectorAll('input[name="difficulty"]');
+
+// Preload sounds
+const startSound = new Audio("assets/sounds/start.mp3");
+const cleanSound = new Audio("assets/sounds/clean.mp3");
+const dirtySound = new Audio("assets/sounds/dirty.mp3");
+const victorySound = new Audio("assets/sounds/victory.mp3");
+const failSound = new Audio("assets/sounds/fail.mp3");
+
 const sounds = {
-  tap:    new Audio('/assets/sounds/drop-tap.mp3'),
-  fail:   new Audio('/assets/sounds/fail-sting.mp3'),
-  victory: new Audio('/assets/sounds/cheer.mp3'),
+  start: startSound,
+  clean: cleanSound,
+  dirty: dirtySound,
+  victory: victorySound,
+  fail: failSound,
 };
 
-Object.values(sounds).forEach(a => a.load());
+Object.values(sounds).forEach((a) => a.load());
 
-
-
+// 4) Game state
 let timeLeft, fillLevel, gameInterval, dropInterval, gameEnded, score;
 
-// Sync UI highlight on the difficulty cards
+// 5) Highlight the selected difficulty card
 function syncDifficultyUI() {
-  diffRadios.forEach(radio => {
+  diffRadios.forEach((radio) => {
     const card = radio.closest(".diff-card");
     card.classList.toggle("active", radio.checked);
   });
 }
 
-// Initialize on page load
-document.addEventListener("DOMContentLoaded", () => {
-  startBtn.disabled = true;
-  diffRadios.forEach(r => r.checked = false);
-  syncDifficultyUI();
-});
-
-// When they choose a difficulty: highlight + shake Start
-diffRadios.forEach(radio => {
+// 6) difficulty headers
+diffRadios.forEach((radio) => {
   radio.addEventListener("change", () => {
+    console.log("🛠 Difficulty:", radio.value);
     syncDifficultyUI();
-    startBtn.disabled = false;
-    startBtn.classList.add("shake");
-    setTimeout(() => startBtn.classList.remove("shake"), 500);
   });
 });
 
-// Start the game
+// 7) Kick off the game
 function startGame() {
-  const picked = document.querySelector('input[name="difficulty"]:checked');
-  if (!picked) return;
+  console.log("▶️ startGame fired");
+  startSound.currentTime = 0;
+  gameRunning = true;
+  diffRadios.forEach((radio) => {
+    radio.disabled = true;
+  });
 
-  // Difficulty settings
+  const picked = document.querySelector('input[name="difficulty"]:checked');
+  if (!picked) {
+    console.warn("⚠️ please pick a difficulty first");
+    return;
+  }
+
+  // set difficulty parameters
   let spawnIntervalMs, badDropChance;
   switch (picked.value) {
     case "easy":
-      spawnIntervalMs = 300;     // drops every 0.3s
-      badDropChance   = 0.08;    // now 92% clean drops
+      spawnIntervalMs = 300;
+      badDropChance = 0.08;
       break;
-
     case "normal":
-      spawnIntervalMs = 800;    // drops every 0.8s
-      badDropChance   = 0.33;   // ~33% polluted to mirror 1 in 3 without safe water
+      spawnIntervalMs = 800;
+      badDropChance = 0.2;
       break;
     case "hard":
-      spawnIntervalMs = 400;   // drops every 0.4s
-      badDropChance   = 0.625;  // 62.5% polluted
+      spawnIntervalMs = 400;
+      badDropChance = 0.625;
       break;
+    default:
+      spawnIntervalMs = 800;
+      badDropChance = 0.3;
   }
+  console.log({ spawnIntervalMs, badDropChance });
 
-  // Reset
-  score      = 0;
-  timeLeft   = 30;
-  fillLevel  = 0;
-  gameEnded  = false;
-  scoreDisplay.innerText = `Score: ${score}`;
-  timerDisplay.innerText = `Time: ${timeLeft}`;
+  // reset state
+  score = 0;
+  timeLeft = 30;
+  fillLevel = 0;
+  gameEnded = false;
+  scoreDisplay.innerText = `Score: 0`;
+  timerDisplay.innerText = `Time: 30`;
   updateWaterLevel();
   gameArea.innerHTML = "";
 
   clearInterval(gameInterval);
   clearInterval(dropInterval);
 
-  gameInterval = setInterval(updateTimer,        1000);
+  gameInterval = setInterval(updateTimer, 1000);
   dropInterval = setInterval(() => spawnDrop(badDropChance), spawnIntervalMs);
 }
 
-// Countdown
+// 8) Countdown
 function updateTimer() {
   if (timeLeft > 0) {
     timeLeft--;
@@ -93,11 +109,10 @@ function updateTimer() {
   }
 }
 
-// Spawn a single drop
+// 9) Spawn one drop
 function spawnDrop(badDropChance) {
   if (gameEnded) return;
-
-  const drop    = document.createElement("div");
+  const drop = document.createElement("div");
   drop.className = "drop";
 
   const isClean = Math.random() > badDropChance;
@@ -108,6 +123,16 @@ function spawnDrop(badDropChance) {
   function handleDrop(e) {
     e.preventDefault();
     if (gameEnded) return;
+
+    if (isClean) {
+      sounds.clean.currentTime = 0;
+      sounds.clean.play().catch(() => {});
+      // scoring logic...
+    } else {
+      sounds.dirty.currentTime = 0;
+      sounds.dirty.play().catch(() => {});
+      // penalty logic...
+    }
 
     if (isClean) {
       score++;
@@ -126,57 +151,101 @@ function spawnDrop(badDropChance) {
     drop.remove();
   }
 
-  drop.addEventListener("click",      handleDrop);
+  drop.addEventListener("click", handleDrop);
   drop.addEventListener("touchstart", handleDrop, { passive: true });
-
   gameArea.appendChild(drop);
   setTimeout(() => drop.remove(), 3000);
 }
 
-// Animate bucket
+// 10) Bucket fill
 function updateWaterLevel() {
   waterLevel.style.height = `${fillLevel}%`;
 }
 
-// End-of-game overlay
+function fadeOutSound(sound, duration = 1000) {
+  const steps = 20;
+  const stepTime = duration / steps;
+  const step = sound.volume / steps;
+
+  let fadeInterval = setInterval(() => {
+    if (sound.volume > step) {
+      sound.volume -= step;
+    } else {
+      sound.volume = 0;
+      sound.pause();
+      sound.currentTime = 0;
+      clearInterval(fadeInterval);
+      sound.volume = 1; // Reset volume after fade
+    }
+  }, stepTime);
+}
+
+// 11) End‐game overlay
 function endGame(won) {
   if (gameEnded) return;
   gameEnded = true;
+  gameRunning = false;
+  diffRadios.forEach((radio) => {
+    radio.disabled = false;
+  });
   clearInterval(gameInterval);
   clearInterval(dropInterval);
 
   const overlay = document.getElementById("overlay");
-  const title   = document.getElementById("overlay-title");
-  const text    = document.getElementById("overlay-text");
-  const link    = document.getElementById("overlay-link");
+  const title = document.getElementById("overlay-title");
+  const text = document.getElementById("overlay-text");
+  const link = document.getElementById("overlay-link");
+  fadeOutSound(sounds.start);
 
   if (won) {
     waterLevel.style.transition = "height 1s ease";
-    waterLevel.style.height     = "100%";
-    confetti({ particleCount:150, spread:70, origin:{ y:0.6 } });
+    waterLevel.style.height = "100%";
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     title.innerText = "🎉 You filled the bucket!";
-    text.innerText  = "Your taps power real clean-water projects.";
-    link.href       = "https://www.charitywater.org/donate";
+    text.innerText = "Your taps power real clean-water projects.";
     sounds.victory.currentTime = 0;
-    sounds.victory.play();
+    sounds.victory.play().catch(() => {});
   } else {
     title.innerText = "⏳ Time’s up!";
-    text.innerText  = "Try again and help turn the tide.";
-    link.href       = "https://www.charitywater.org/donate";
+    text.innerText = "Try again and help turn the tide.";
     sounds.fail.currentTime = 0;
-    sounds.fail.play();
+    sounds.fail.play().catch(() => {});
   }
-
+  link.href = "https://www.charitywater.org/donate";
   overlay.classList.remove("hidden");
 }
 
-// Close overlay
+// 12) Close overlay
 function closeOverlay() {
   document.getElementById("overlay").classList.add("hidden");
 }
 
-// Button hookups
-startBtn.addEventListener("click", startGame);
+// 13) Sound hook up for Buttons
+startBtn.addEventListener("click", () => {
+  if (gameRunning) return; // Prevent double starts
+
+  const picked = document.querySelector('input[name="difficulty"]:checked');
+  if (!picked) {
+    alert("Please select a difficulty before starting!");
+    return;
+  }
+
+  try {
+    // Play the music only if it hasn't started yet or was faded
+    if (sounds.start.paused || sounds.start.currentTime === 0) {
+      sounds.start.volume = 1;
+      sounds.start.currentTime = 0;
+      sounds.start.play().catch((err) => {
+        console.warn("⚠️ Could not play start sound:", err);
+      });
+    }
+  } catch (err) {
+    console.warn("⚠️ Could not play start sound:", err);
+  }
+
+  startGame();
+});
+
 resetBtn.addEventListener("click", () => {
   clearInterval(gameInterval);
   clearInterval(dropInterval);
