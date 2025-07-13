@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thirst Quest | charity: water Game</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  </head>
+  <body>
+    <nav id="main-nav">
+      <ul>
+        <li><a href="#game">Game</a></li>
+        <li><a href="#impact-globe">Global Impact</a></li>
+        <li><a href="#charity-info">About</a></li>
+      </ul>
+    </nav>
+    <div id="game">
+      <h1>💧 Thirst Quest</h1>
+      <p class="subtitle">Tap the clean water drops to help communities!</p>
+
+      <div id="scoreboard">
+        <span id="score">Score: 0</span>
+        <span id="timer">Time: 30</span>
+      </div>
+
+      <div id="bucket-container">
+        <div id="water-level"></div>
+      </div>
+
+      <div id="game-area"></div>
+
+      <button id="start-btn">Start Game</button>
+    </div>
+
+    <button id="reset-btn">Reset Game</button>
+
+    <div id="overlay" class="overlay hidden">
+      <div class="modal">
+        <h2 id="overlay-title"></h2>
+        <p id="overlay-text"></p>
+        <a id="overlay-link" href="#" target="_blank" rel="noopener noreferrer"
+          >💛 Donate</a
+        >
+        <br />
+        <button onclick="closeOverlay()">Close</button>
+      </div>
+    </div>
+
+    <section id="impact-globe">
+      <h2>🌍 charity: water’s Global Reach</h2>
+      <p>Explore where clean water is changing lives across the globe.</p>
+      <p class="instructions">
+        Tap or hover over the glowing markers to learn how charity: water is
+        transforming lives in each region. Click links to explore projects.
+        Scroll or pinch to zoom in! 
+      </p>
+      <div id="globeViz" style="width: 100%; height: 600px"></div>
+    </section>
+
+    <div id="charity-info">
+      <p>
+        <strong>About charity: water:</strong>
+        <br /><br />
+        charity: water is a nonprofit organization dedicated to ending the
+        global water crisis by providing clean and safe drinking water to people
+        in developing countries.
+        <br /><br />
+        Since 2006, they’ve funded over <strong>111,000 water projects</strong>,
+        delivering life-changing access to clean water to more than
+        <strong>15 million people</strong> in
+        <strong>29 countries</strong> across Africa, Asia, Central and South
+        America. <br /><br />
+        From <strong>drilling deep boreholes in Ethiopia</strong> to
+        <strong>repairing broken wells in Uganda</strong> and building
+        <strong>gravity-fed tap systems in Nepal</strong>, charity: water
+        supports locally-led, sustainable solutions tailored to each community’s
+        needs. <br /><br />
+        What makes charity: water unique is their <strong>100% Model</strong> —
+        every public donation goes directly to water projects, while private
+        donors fund operational costs. They also invest in real-time monitoring
+        tools and GPS tracking to ensure accountability and transparency for
+        every dollar spent. <br /><br />
+        <a
+          href="https://www.charitywater.org/our-work"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="learn-more-link"
+        >
+          Learn more about their work and impact →</a
+        >
+      </p>
+    </div>
+
+    <!-- Globe.gl + Three.js + Game JS-->
+    <script src="https://unpkg.com/three"></script>
+    <script src="https://unpkg.com/globe.gl"></script>
+    <script src="script.js" defer></script>
+    <script src="globe-setup.js"></script>
+
+    <footer id="site-footer">
+      <p>
+        Made with ❤️ by Kezia West as a student project inspired by charity:
+        water.
+      </p>
+      <p>
+        All rights to the logo and brand belong to
+        <a
+          href="https://www.charitywater.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          >charity: water</a
+        >.
+      </p>
+    </footer>
+  </body>
+</html>
