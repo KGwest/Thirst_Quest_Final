@@ -16,6 +16,11 @@
       </ul>
     </nav>
     <div id="game">
+      <img
+        src="/assets/charity-water-logo.png"
+        alt="charity: water logo"
+        id="charity-logo"
+      />
       <h1>💧 Thirst Quest</h1>
       <p class="subtitle">Tap the clean water drops to help communities!</p>
 
@@ -29,6 +34,74 @@
       </div>
 
       <div id="game-area"></div>
+      <div id="difficulty-picker">
+        <div class="diff-card" data-mode="easy">
+          <input type="radio" name="difficulty" id="diff-easy" value="easy" />
+          <label for="diff-easy">Easy</label>
+          <div class="diff-info">
+            <img src="/assets/easy-mode.gif" alt="Easy mode" />
+            <p>
+              🟢 <strong>Easy</strong><br />
+              <strong>Drop rate:</strong> every <strong>0.3 s</strong><br />
+              <strong>Pollution:</strong> only <strong>8%</strong> “bad” drops
+            </p>
+            <p>
+              <em
+                >“New here? No problem—water’s flowing fast and mostly clean.
+                Think of this as a sunny day stroll: tap drops as they fly by
+                and watch that bucket fill in record time!”</em
+              >
+            </p>
+          </div>
+        </div>
+
+        <div class="diff-card" data-mode="normal">
+          <input
+            type="radio"
+            name="difficulty"
+            id="diff-normal"
+            value="normal"
+          />
+          <label for="diff-normal">Normal</label>
+          <div class="diff-info">
+            <img src="/assets/normal-mode.gif" alt="Normal mode" />
+            <p>
+              🟡 <strong>Normal</strong><br />
+              <strong>Drop rate:</strong> every <strong>0.8 s</strong><br />
+              <strong>Pollution:</strong> about <strong>33%</strong> “bad” drops
+            </p>
+            <p>
+              <em
+                >“Time to step up your game. One in three drops is polluted—just
+                like in the real world nearly 1 in 3 people lack safe water.
+                Stay sharp, tap the clean ones, and fill your bucket before the
+                clock runs out.”</em
+              >
+            </p>
+          </div>
+        </div>
+
+        <div class="diff-card" data-mode="hard">
+          <input type="radio" name="difficulty" id="diff-hard" value="hard" />
+          <label for="diff-hard">Hard+</label>
+          <div class="diff-info">
+            <img src="/assets/hard-mode.gif" alt="Hard mode" />
+            <p>
+              🔴 <strong>Hard+</strong><br />
+              <strong>Drop rate:</strong> every <strong>0.4 s</strong><br />
+              <strong>Pollution:</strong> a punishing
+              <strong>62.5%</strong> “bad” drops
+            </p>
+            <p>
+              <em
+                >“Ready for a challenge? The sky’s pouring mostly poison—you’ll
+                dodge broken drops and hunt the few clean ones. Only the
+                quickest and most focused will conquer this storm!”</em
+              >
+            </p>
+          </div>
+        </div>
+      </div>
 
       <button id="start-btn">Start Game</button>
     </div>
@@ -53,7 +126,7 @@
       <p class="instructions">
         Tap or hover over the glowing markers to learn how charity: water is
         transforming lives in each region. Click links to explore projects.
-        Scroll or pinch to zoom in! 
+        Scroll or pinch to zoom in!
       </p>
       <div id="globeViz" style="width: 100%; height: 600px"></div>
     </section>
@@ -98,7 +171,7 @@
     <script src="script.js" defer></script>
     <script src="globe-setup.js"></script>
 
-    <footer id="site-footer">
+    <footer>
       <p>
         Made with ❤️ by Kezia West as a student project inspired by charity:
         water.
@@ -113,5 +186,16 @@
         >.
       </p>
     </footer>
+
+    <script>
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute("href")).scrollIntoView({
+            behavior: "smooth",
+          });
+        });
+      });
+    </script>
   </body>
 </html>

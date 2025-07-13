@@ -45,21 +45,22 @@ html {
 }
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #fffbea;
+  background-color: #77a8bb;
   text-align: center;
   margin: 0;
   padding: 20px;
 }
 
 h1 {
-  color: #20201c; 
+  color: #1a1a1a; 
   font-size: 2.5em;
   margin-bottom: 0;
+  
 }
 
 .subtitle {
   font-size: 1.1em;
-  color: #333;
+  color: #1a1a1a;
   margin-top: 5px;
 }
 
@@ -75,21 +76,22 @@ h1 {
   margin-top: 20px;
   padding: 10px 20px;
   font-size: 1em;
-  background-color: #ffd800;/* Charity: water yellow */
+  color: #1a1a1a;
+  background-color: #ffc907;/* Charity: water yellow */
   border: none;
   cursor: pointer;
   border-radius: 5px;
 }
 
 #start-btn:hover {
-  background-color: #ffcb00;
+  background-color: #ffc907;
 }
 
 #charity-info {
- background-color: #f8d805;
+ background-color: #fff7e1;
   padding: 2rem;
   border-radius: 10px;
-  color: #000;
+  color: #1a1a1a;
   font-size: 1rem;
   max-width: 800px;
   margin: 2rem auto;
@@ -102,7 +104,7 @@ h1 {
   display: inline-block;
   margin-top: 1rem;
   font-weight: bold;
-  color: #0056d2;
+  color: #77a8bb;
   text-decoration: none;
 }
 
@@ -111,7 +113,7 @@ h1 {
 }
 
 #charity-info a {
-  color: #0077cc;
+  color: #77a8bb;
   text-decoration: none;
 }
 
@@ -160,7 +162,7 @@ h1 {
 /* Globe-setup styles */
 
 #impact-globe {
-  background-color: #f0f8ff;
+  background-color: #cbccd1;
   padding: 30px 20px;
   margin-top: 20px;
   text-align: center;
@@ -170,7 +172,7 @@ h1 {
 
 }
 #impact-globe h2 {
-  color: #333;
+  color: #1a1a1a;
   margin-bottom: 10px;
 }
 
@@ -198,7 +200,7 @@ h1 {
 }
 
 .modal {
-  background-color: white;
+  background-color: #cbccd1;
   padding: 20px;
   border-radius: 10px;
   max-width: 90%;
@@ -213,7 +215,7 @@ h1 {
 .instructions {
   font-style: italic;
   margin-bottom: 20px;
-  color: #555;
+  color: #1a1a1a;
 }
 
 
@@ -233,18 +235,17 @@ h1 {
   }
 }
 
-#site-footer {
+footer {
   text-align: center;
   margin-top: 60px;
   padding: 20px;
   font-size: 0.9em;
-  color: #444;
-
+  color: #fff7e1;
+  background-color: #1a1a1a;
 }
 
-
 #main-nav {
-  background-color: #ffd800;
+  background-color: #1a1a1a;
   padding: 10px 0;
   text-align: center;
 }
@@ -260,10 +261,89 @@ h1 {
 
 #main-nav a {
   text-decoration: none;
-  color: #20201c;
+  color: #fff7e1;
   font-weight: bold;
 }
 
 #main-nav a:hover {
   text-decoration: underline;
+}
+
+
+#charity-logo {
+  width: 120px;
+  margin-bottom: 10px;
+}
+
+#difficulty-picker {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.diff-card {
+  position: relative;
+  padding: 0.5rem 1rem;
+  background: #fffbea;
+  border: 2px solid #ffc907;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s;
+}
+.diff-card:hover { transform: translateY(-4px) scale(1.05); }
+
+.diff-card input {
+  display: none;
+}
+
+.diff-card label {
+  font-weight: bold;
+  color: #20201c;
+}
+
+/* hidden by default */
+.diff-info {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  background: #003366;    /* dark semi-opaque background */
+  color: #fff;                      /* white text */
+  padding: 0.5rem;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.diff-card:hover .diff-info {
+  opacity: 1;
+}
+
+.diff-info img {
+  display: block;
+  width: 100%;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  filter: brightness(1.1);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0) }
+  20%, 60% { transform: translateX(-5px) }
+  40%, 80% { transform: translateX(5px) }
+}
+
+#start-btn.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Highlight the selected difficulty card */
+.diff-card.active {
+  background: #ffd80030;   /* light yellow overlay */
+  border-color: #ffc907;   /* bright yellow border */
+  box-shadow: 0 2px 8px rgba(255,216,0,0.5);
 }
