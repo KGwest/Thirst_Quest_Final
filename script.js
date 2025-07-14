@@ -172,7 +172,7 @@ function fadeOutSound(sound, duration = 1000) {
     if (sound.volume > step) {
       sound.volume -= step;
     } else {
-      sound.volume = 0;
+      sound.volume = 1;
       sound.pause();
       sound.currentTime = 0;
       clearInterval(fadeInterval);
@@ -231,8 +231,8 @@ startBtn.addEventListener("click", () => {
     return;
   }
 
-  // Play music only on first game start
-  if (sounds.start.paused && sounds.start.currentTime === 0) {
+// Play music only if not already running
+  if (sounds.start.paused || sounds.start.ended) {
     sounds.start.volume = 1;
     sounds.start.play().catch((err) => {
       console.warn("⚠️ Could not play start sound:", err);
@@ -242,9 +242,9 @@ startBtn.addEventListener("click", () => {
   startGame();
 });
 
-
 resetBtn.addEventListener("click", () => {
   clearInterval(gameInterval);
   clearInterval(dropInterval);
+  fadeOutSound(sounds.start); // <- this was missing
   startGame();
 });
