@@ -51,6 +51,14 @@ diffRadios.forEach((radio) => {
 function startGame() {
   console.log("▶️ startGame fired");
   startSound.currentTime = 0;
+  // Play music only if not already running
+  if (sounds.start.paused || sounds.start.ended) {
+    sounds.start.volume = 1;
+    sounds.start.play().catch((err) => {
+      console.warn("⚠️ Could not play start sound:", err);
+    });
+  }
+
   gameRunning = true;
   diffRadios.forEach((radio) => {
     radio.disabled = true;
@@ -198,6 +206,11 @@ function endGame(won) {
   const link = document.getElementById("overlay-link");
   fadeOutSound(sounds.start);
 
+  setTimeout(() => {
+  sounds.start.pause();
+  sounds.start.currentTime = 0;
+}, 1200); // allow fadeOutSound to complete
+
   if (won) {
     waterLevel.style.transition = "height 1s ease";
     waterLevel.style.height = "100%";
@@ -229,14 +242,6 @@ startBtn.addEventListener("click", () => {
   if (!picked) {
     alert("Please select a difficulty before starting!");
     return;
-  }
-
-// Play music only if not already running
-  if (sounds.start.paused || sounds.start.ended) {
-    sounds.start.volume = 1;
-    sounds.start.play().catch((err) => {
-      console.warn("⚠️ Could not play start sound:", err);
-    });
   }
 
   startGame();
